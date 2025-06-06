@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Batalha Naval</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    table{border-collapse:collapse;margin-top:1rem}
+    td{width:30px;height:30px;border:1px solid #555;text-align:center;cursor:pointer}
+    .hit{background:crimson;color:#fff}
+    .miss{background:#ddd}
+    .sunk{background:black;color:#fff}
+  </style>
+</head>
+<body>
+  <h1>Batalha Naval</h1>
+  <main style="flex-direction:column;align-items:center">
+    <table id="grid"></table>
+    <p id="info"></p>
+    <button onclick="reset()">Reiniciar</button>
+  </main>
+
+<script>
+const SIZE=10;
+const SHIPS=[5,4,3];
+let board,shipsLeft;
+
+function reset(){
+  board=Array.from({length:SIZE},()=>Array(SIZE).fill(0)); // 0 água, >0 id navio
+  let id=1;
+  SHIPS.forEach(len=>{
+    placeShip(id++,len);
+  });
+  shipsLeft=SHIPS.length;
+  draw();
+  msg('Tente afundar todos os navios!');
+}
+function placeShip(id,len){
+  let placed=false;
+  while(!placed){
+    const vertical=Math.random()<0.5;
+    const r=Math.floor(Math.random()*(vertical?SIZE-len+1:SIZE));
+    const c=Math.floor(Math.random()*(vertical?SIZE:SIZE-len+1));
+    let ok=true;
+    for(let i=0;i<len;i++){
+      const rr=r+(vertical?i:0);
+      const cc=c+(vertical?0:i);
+      if(board[rr][cc]){ok=false;break;}
+    }
+    if(ok){
+      for(let i=0;i<len;i++){
+        const rr=r+(vertical?i:0);
+        const cc=c+(vertical?0:i);
+        board[rr][cc]=id;
+      }
+      placed=true;
+    }
+  }
+}
+function draw(){
+  const t=document.getElementById('grid'); t.innerHTML='';
+  for(let r=0;r<SIZE;r++){
+    const tr=document.createElement('tr');
+    for(let c=0;c<SIZE;c++){
+      const td=document.createElement('td');
+      td.dataset.r=r;td.dataset.c=c;
+      td.onclick=shoot;
+      tr.appendChild(td);
+    }
+    t.appendChild(tr);
+  }
+}
+const hits={}; // id -> hits
+function shoot(){
+  const r=this.dataset.r, c=this.dataset.c;
+  const cell=board[r][c];
+  if(this.className) return;         // já clicado
+  if(cell===0){
+    this.className='miss';
+    msg('Água...');
+  }else{
+    hits[cell]=(hits[cell]||0)+1;
+    const size=SHIPS[cell-1];
+    if(hits[cell]===size){
+      msg('Você afundou um navio!');
+      markSunk(cell);
+      shipsLeft--;
+      if(shipsLeft===0) msg('🏆 Todos afundados! Você venceu!');
+    }else{
+      msg('Acertou!');
+      this.className='hit';
+    }
+  }
+}
+function markSunk(id){
+  [...document.querySelectorAll('td')].forEach(td=>{
+    const {r,c}=td.dataset;
+    if(board[r][c]==id) td.className='sunk';
+  });
+}
+function msg(text){document.getElementById('info').textContent=text;}
+reset();
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Dinâmico</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .question{font-size:1.3rem;margin-bottom:1rem}
+    .option{display:block;margin:.5rem 0;padding:.4rem .8rem;border:2px solid #555;border-radius:8px;cursor:pointer}
+    .option:hover{background:#eee}
+  </style>
+</head>
+<body>
+  <h1>Quiz</h1>
+  <main style="flex-direction:column;align-items:center">
+    <div id="qBox" class="question"></div>
+    <div id="opts"></div>
+    <p id="score"></p>
+    <button onclick="next()">Próxima</button>
+  </main>
+
+<script>
+const QUESTIONS=[
+ {q:'Qual planeta é conhecido como planeta vermelho?',opts:['Terra','Marte','Vênus','Júpiter'],a:1},
+ {q:'HTML é linguagem de?',opts:['Marcação','Programação','Consulta','Banco de dados'],a:0},
+ {q:'True ou False: 2 + 2 = 5',opts:['Verdadeiro','Falso'],a:1},
+];
+let current=-1,points=0;
+
+function render(){
+  const {q,opts}=QUESTIONS[current];
+  document.getElementById('qBox').textContent=q;
+  const optDiv=document.getElementById('opts'); optDiv.innerHTML='';
+  opts.forEach((o,i)=>{
+    const d=document.createElement('div');
+    d.className='option';
+    d.textContent=o;
+    d.onclick=()=>answer(i);
+    optDiv.appendChild(d);
+  });
+  document.getElementById('score').textContent=`Pontuação: ${points}/${current}`;
+}
+function answer(i){
+  const correct=QUESTIONS[current].a===i;
+  if(correct) {points++; alert('✔️ Correto!');}
+  else        {alert('❌ Errado!');}
+  next();
+}
+function next(){
+  current++;
+  if(current>=QUESTIONS.length){
+    alert(`Fim! Você fez ${points}/${QUESTIONS.length} pontos.`);
+    current=-1; points=0;
+  }
+  current++;
+  render();
+}
+next();
+</script>
+</body>
+</html>

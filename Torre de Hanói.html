@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Torre de Hanói</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    main{flex-direction:column;align-items:center}
+    .pegs{display:flex;gap:2rem;margin-top:2rem}
+    .peg{width:120px;height:230px;display:flex;flex-direction:column-reverse;align-items:center;border:3px solid #555;border-radius:8px;position:relative}
+    .peg::before{content:"";width:6px;height:100%;background:#555;position:absolute;left:calc(50% - 3px);bottom:0}
+    .disk{height:20px;border-radius:4px;margin:2px 0;background:rebeccapurple;color:#fff;text-align:center;line-height:20px;font-size:.8rem}
+    .selected{outline:3px dashed crimson}
+    button{margin-top:1rem;padding:.5rem 1rem}
+  </style>
+</head>
+<body>
+  <h1>Torre de Hanói</h1>
+  <main>
+    <p>Clique em um disco para selecioná-lo e depois na haste de destino.</p>
+    <div class="pegs" id="pegs"></div>
+    <button onclick="reset()">Reiniciar</button>
+  </main>
+
+<script>
+const DISCS = 4;                 // ajuste 3-5 discos
+let state = [[],[],[]];          // 3 hastes
+let selected = null;
+
+function reset(){
+  state=[[],[],[]];
+  for(let i=DISCS;i>=1;i--) state[0].push(i);
+  selected=null;
+  render();
+}
+function render(){
+  const pegsEl=document.getElementById('pegs');
+  pegsEl.innerHTML='';
+  state.forEach((peg,idx)=>{
+    const pegEl=document.createElement('div');
+    pegEl.className='peg';
+    pegEl.dataset.idx=idx;
+    pegEl.onclick=()=>clickPeg(idx);
+    peg.forEach(size=>{
+      const d=document.createElement('div');
+      d.className='disk';
+      d.style.width=20+size*20+'px';
+      d.textContent=size;
+      if(selected && selected.src.idx===idx && selected.disk===size) d.classList.add('selected');
+      pegEl.appendChild(d);
+    });
+    pegsEl.appendChild(pegEl);
+  });
+  checkWin();
+}
+function clickPeg(idx){
+  if(!selected){            // selecionar disco
+    const disk=state[idx].at(-1);
+    if(disk){ selected={src:{idx},disk}; render(); }
+  }else{                     // tentar mover
+    if(idx===selected.src.idx){ selected=null; render(); return; }
+    const top=state[idx].at(-1);
+    if(!top || top>selected.disk){   // movimento válido
+      state[selected.src.idx].pop();
+      state[idx].push(selected.disk);
+    }
+    selected=null;
+    render();
+  }
+}
+function checkWin(){
+  if(state[2].length===DISCS){
+    setTimeout(()=>alert('Parabéns! Você resolveu.'),50);
+  }
+}
+reset();
+</script>
+</body>
+</html>

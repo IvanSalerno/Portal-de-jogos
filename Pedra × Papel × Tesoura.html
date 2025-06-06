@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>PPT</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    button{margin:.5rem 1rem;padding:.7rem 1.5rem;font-size:1rem}
+  </style>
+</head>
+<body>
+  <h1>Pedra · Papel · Tesoura</h1>
+  <main style="flex-direction:column;align-items:center">
+    <div>
+      <button onclick="play('pedra')">🪨 Pedra</button>
+      <button onclick="play('papel')">📄 Papel</button>
+      <button onclick="play('tesoura')">✂️ Tesoura</button>
+    </div>
+    <p id="result"></p>
+    <p id="score"></p>
+  </main>
+
+<script>
+const CHOICES=['pedra','papel','tesoura'];
+let wins=0,losses=0,draws=0;
+function play(user){
+  const comp=CHOICES[Math.floor(Math.random()*3)];
+  let res='';
+  if(user===comp) {draws++;res='Empate.';}
+  else if((user==='pedra'   && comp==='tesoura')||
+          (user==='papel'   && comp==='pedra') ||
+          (user==='tesoura' && comp==='papel')){wins++;res='Você ganhou!';}
+  else {losses++;res='Você perdeu.';}
+
+  document.getElementById('result').textContent=`Você: ${user} | PC: ${comp} → ${res}`;
+  document.getElementById('score').textContent=`Placar – Você ${wins} : ${losses} PC (Empates ${draws})`;
+}
+</script>
+</body>
+</html>

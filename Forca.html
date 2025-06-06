@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo da Forca</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .word{font-size:2rem;letter-spacing:.3em;margin:1rem 0}
+    .letters button{margin:.2rem;width:32px;height:32px;border:none;background:#ececec;border-radius:6px;cursor:pointer}
+    .letters button[disabled]{background:#ccc;cursor:not-allowed;color:#666}
+    .stats{margin-top:1rem}
+  </style>
+</head>
+<body>
+  <h1>Forca</h1>
+  <main style="flex-direction:column;align-items:center">
+    <canvas id="gallows" width="200" height="200"></canvas>
+    <div class="word" id="word"></div>
+    <div class="letters" id="letters"></div>
+    <div class="stats" id="stats"></div>
+    <button onclick="start()">Nova Palavra</button>
+  </main>
+
+<script>
+const WORDS=["javascript","computador","tartaruga","meia","internet","fantasia","viagem","floresta"];
+const MAX_ERRORS=6;
+let secret,display,errors,used;
+
+const ctx=document.getElementById('gallows').getContext('2d');
+function drawGallows(e){
+  ctx.clearRect(0,0,200,200);
+  ctx.lineWidth=3;
+  ctx.strokeRect(10,190,100,0);           // base
+  ctx.beginPath();ctx.moveTo(60,190);ctx.lineTo(60,10);ctx.lineTo(140,10);ctx.lineTo(140,30);ctx.stroke();
+
+  if(e>0){ctx.beginPath();ctx.arc(140,50,20,0,Math.PI*2);ctx.stroke();}
+  if(e>1){ctx.beginPath();ctx.moveTo(140,70);ctx.lineTo(140,120);ctx.stroke();}
+  if(e>2){ctx.beginPath();ctx.moveTo(140,80);ctx.lineTo(120,100);ctx.stroke();}
+  if(e>3){ctx.beginPath();ctx.moveTo(140,80);ctx.lineTo(160,100);ctx.stroke();}
+  if(e>4){ctx.beginPath();ctx.moveTo(140,120);ctx.lineTo(120,150);ctx.stroke();}
+  if(e>5){ctx.beginPath();ctx.moveTo(140,120);ctx.lineTo(160,150);ctx.stroke();}
+}
+function start(){
+  secret=WORDS[Math.floor(Math.random()*WORDS.length)];
+  display=Array(secret.length).fill('_');
+  errors=0;used=[];
+  [...'abcdefghijklmnopqrstuvwxyz'].forEach(c=>{
+    const btn=document.getElementById('btn_'+c);
+    if(btn) btn.disabled=false;
+  });
+  update();
+}
+function guess(char){
+  if(used.includes(char))return;
+  used.push(char);
+  document.getElementById('btn_'+char).disabled=true;
+  if(secret.includes(char)){
+    [...secret].forEach((c,i)=>{if(c===char)display[i]=char});
+  }else errors++;
+  update();
+}
+function update(){
+  document.getElementById('word').textContent=display.join(' ');
+  document.getElementById('stats').textContent=`Erros: ${errors}/${MAX_ERRORS}`;
+  drawGallows(errors);
+  if(!display.includes('_')) setTimeout(()=>alert('Você venceu!'),50);
+  if(errors===MAX_ERRORS)   setTimeout(()=>alert('Game Over! Palavra era '+secret),50);
+}
+function buildKeyboard(){
+  const cont=document.getElementById('letters'); cont.innerHTML='';
+  [...'abcdefghijklmnopqrstuvwxyz'].forEach(c=>{
+    const b=document.createElement('button');
+    b.textContent=c.toUpperCase();
+    b.id='btn_'+c;
+    b.onclick=()=>guess(c);
+    cont.appendChild(b);
+  });
+}
+buildKeyboard();
+start();
+</script>
+</body>
+</html>

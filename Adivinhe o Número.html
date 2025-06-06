@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Adivinhe o Número</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    input{margin:.5rem;padding:.3rem;width:60px;text-align:center}
+  </style>
+</head>
+<body>
+  <h1>Adivinhe o Número (1-100)</h1>
+  <main style="flex-direction:column;align-items:center">
+    <input type="number" id="n" min="1" max="100">
+    <button onclick="guess()">Tentar</button>
+    <p id="hint"></p>
+    <button onclick="start()">Novo Número</button>
+  </main>
+
+<script>
+let secret,tries;
+function start(){secret=Math.floor(Math.random()*100)+1;tries=0;hint('Novo jogo!');}
+function hint(t){document.getElementById('hint').textContent=t;}
+function guess(){
+  const val=parseInt(document.getElementById('n').value);
+  if(!val) return;
+  tries++;
+  if(val===secret){hint(`🎉 Acertou em ${tries} tentativas!`);}
+  else if(val<secret){hint('Muito baixo...');}
+  else {hint('Muito alto...');}
+}
+start();
+</script>
+</body>
+</html>

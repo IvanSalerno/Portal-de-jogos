@@ -1,0 +1,7 @@
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:#fafafa;color:#222}
+h1{margin:2rem 0;text-align:center;font-size:2rem;color:rebeccapurple}
+main{width:clamp(300px,90%,900px);display:flex;flex-wrap:wrap;gap:1rem;justify-content:center}
+.card{flex:1 1 200px;background:#fff;border-radius:12px;padding:1.5rem;box-shadow:0 4px 10px #0001;text-align:center;transition:transform .2s}
+.card:hover{transform:translateY(-6px)}
+.card a{display:block;margin-top:1rem;padding:.5rem 1rem;border:none;border-radius:8px;background:rebeccapurple;color:#fff;text-decoration:none;font-weight:bold}
