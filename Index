@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal de Mini-Jogos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Portal de Mini-Jogos</h1>
+
+  <main>
+    <section class="card">
+      <h2>Torre de Hanói</h2>
+      <p>Mova os discos, resolva o puzzle!</p>
+      <a href="Torre de Hanói.html">Jogar</a>
+    </section>
+
+    <section class="card">
+      <h2>Forca</h2>
+      <p>Adivinhe a palavra antes de “enforcar”!</p>
+      <a href="Forca.html">Jogar</a>
+    </section>
+
+    <section class="card">
+      <h2>Quiz</h2>
+      <p>Teste seus conhecimentos em várias áreas.</p>
+      <a href="Quiz.html">Jogar</a>
+    </section>
+
+    <section class="card">
+      <h2>Pedra × Papel × Tesoura</h2>
+      <p>Desafie o computador!</p>
+      <a href="Pedra × Papel × Tesoura.html">Jogar</a>
+    </section>
+
+    <section class="card">
+      <h2>Batalha Naval</h2>
+      <p>Afunde todos os navios adversários.</p>
+      <a href="Batalha Naval simplificada.html">Jogar</a>
+    </section>
+
+    <section class="card">
+      <h2>Adivinhe o Número</h2>
+      <p>Quantos palpites você precisa?</p>
+      <a href="Adivinhe o Número.html">Jogar</a>
+    </section>
+  </main>
+</body>
+</html>
